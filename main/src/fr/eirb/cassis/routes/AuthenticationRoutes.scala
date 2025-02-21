@@ -5,7 +5,7 @@ import cask.{Abort, Cookie, Logger, RawDecorator, Redirect, Request, Response, R
 import cask.model.Response.Raw
 import cask.router.Result
 import fr.eirb.cassis.renderer.{body, html, rendererToResponse, script}
-import fr.eirb.cassis.toCAS
+import fr.eirb.cassis.CAS
 import fr.eirb.cassis.users.User.Normal
 import fr.eirb.cassis.users.User
 
@@ -154,7 +154,7 @@ case class AuthenticationRoutes()(implicit cc: Context, log: Logger) extends Rou
         ).text()
         """<cas:user>([a-z]+[0-9]*)</cas:user>""".r.findFirstIn(response).map(_.replaceAll("</?cas:user>", "")) match
           case Some(cas) =>
-            toCAS(cas) match
+            CAS.either(cas) match
               case Right(login) =>
                 val session = UUID.randomUUID().toString
                 val user = Normal(login)
