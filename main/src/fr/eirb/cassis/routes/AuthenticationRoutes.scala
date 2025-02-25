@@ -4,7 +4,6 @@ import castor.Context
 import cask.{Abort, Cookie, Logger, RawDecorator, Redirect, Request, Response, Routes, get}
 import cask.model.Response.Raw
 import cask.router.Result
-import fr.eirb.cassis.renderer.{body, html, rendererToResponse, script}
 import fr.eirb.cassis.CAS
 import fr.eirb.cassis.users.User.Normal
 import fr.eirb.cassis.users.User
@@ -161,8 +160,9 @@ case class AuthenticationRoutes()(implicit cc: Context, log: Logger) extends Rou
                 val now = Instant.now()
                 sessionIds = filterNot(sessionIds, user, now) + (session -> (user, now))
                 println(s"${request.exchange.getSourceAddress.getHostString} Authenticated as $cas")
-                rendererToResponse(
-                  html(body = body(script(s"window.location = '$redirectDecoded';"))),
+                Response(
+                  html.redirection(redirectDecoded).toString(),
+                  headers = Seq("Content-type" -> "text/html"),
                   cookies = Seq(Cookie("session", s"$session", expires = now.plus(expirationDelay), path = "/"))
                 )
               case _ =>
