@@ -160,9 +160,8 @@ case class AuthenticationRoutes()(implicit cc: Context, log: Logger) extends Rou
                 val now = Instant.now()
                 sessionIds = filterNot(sessionIds, user, now) + (session -> (user, now))
                 println(s"${request.exchange.getSourceAddress.getHostString} Authenticated as $cas")
-                Response(
-                  html.redirection(redirectDecoded).toString(),
-                  headers = Seq("Content-type" -> "text/html"),
+                renderHtml(
+                  html.redirection(redirectDecoded),
                   cookies = Seq(Cookie("session", s"$session", expires = now.plus(expirationDelay), path = "/"))
                 )
               case _ =>

@@ -1,6 +1,6 @@
 package fr.eirb.cassis
 
-import fr.eirb.cassis.routes.{AuthenticationRoutes, ShorterRoutes, WelcomeRoutes}
+import fr.eirb.cassis.routes.{AuthenticationRoutes, ResourcesRoutes, ShorterRoutes, WelcomeRoutes}
 
 object CassisMain extends cask.Main:
 
@@ -8,5 +8,5 @@ object CassisMain extends cask.Main:
   override def port: Int = 8080
 
   println("root@cassis.eirb.fr $ ./initialize")
-  val allRoutes: Seq[cask.Routes] = Seq(AuthenticationRoutes(), ShorterRoutes(), WelcomeRoutes())
+  val allRoutes: Seq[cask.Routes] = Seq(AuthenticationRoutes(), ResourcesRoutes(), ShorterRoutes(), WelcomeRoutes())
   println("Initialized !")
